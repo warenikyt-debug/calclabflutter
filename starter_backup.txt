@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: Screen()));
+}
+
+class Screen extends StatefulWidget {
+  const new({super.key});
+
+  @override
+  State<Screen> createState() => _ScreenState();
+}
+
+class _ScreenState extends State<Screen> {
+  String resultText = " ";
+  void calculate(String operation) {
+    double answer = 0;
+    final a = double.tryParse(firstController.text);
+    final b = double.tryParse(secondController.text);
+
+    if (a == null || b == null) {
+      setState(() {
+        resultText = "Write TWO numbers";
+      });
+      return;
+    }
+
+    if (operation == "+") {
+      answer = addN(a, b);
+    } else if (operation == "-") {
+      answer = substractN(a, b);
+    } else if (operation == "*") {
+      answer = multiplyN(a, b);
+    } else if (operation == "/") {
+      if (b == 0) {
+        setState(() {
+          resultText = "Ne delite na nol";
+        });
+        return;
+      } else {
+        answer = divideN(a, b);
+      }
+    } else {
+      setState(() {
+        resultText = "Unknown operation";
+      });
+      return;
+    }
+
+    final answerText = answer.toStringAsFixed(3);
+    setState(() {
+      resultText = answerText;
+    });
+  }
+
+  final firstController = TextEditingController();
+  final secondController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: 260,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Calculator"),
+              TextField(controller: firstController),
+              TextField(controller: secondController),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      calculate("+");
+                    },
+                    child: Text("+"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      calculate("-");
+                    },
+                    child: Text("-"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      calculate("*");
+                    },
+                    child: Text("*"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      calculate("/");
+                    },
+                    child: Text("/"),
+                  ),
+                ],
+              ),
+              Text(resultText),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+double firstN = 7;
+double secondN = 0;
+
+double addN(double firstN, double secondN) {
+  return (firstN + secondN);
+}
+
+double substractN(double firstN, double secondN) {
+  return (firstN - secondN);
+}
+
+double multiplyN(double firstN, double secondN) {
+  return (firstN * secondN);
+}
+
+double divideN(double firstN, double secondN) {
+  return (firstN / secondN);
+}
